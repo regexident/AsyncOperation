@@ -1,0 +1,8 @@
+SUPPORTED_PLATFORMS                    = macosx iphonesimulator iphoneos
+VALID_ARCHS[sdk=macosx*]               = i386 x86_64
+VALID_ARCHS[sdk=iphonesimulator*]      = arm64 armv7 armv7s
+VALID_ARCHS[sdk=iphoneos*]             = arm64 armv7 armv7s
+
+LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]          = $(inherited) '@executable_path/../Frameworks' '@loader_path/Frameworks'
+LD_RUNPATH_SEARCH_PATHS[sdk=iphonesimulator*] = $(inherited) '@executable_path/Frameworks' '@loader_path/Frameworks'
+LD_RUNPATH_SEARCH_PATHS[sdk=iphoneos*]        = $(inherited) '@executable_path/Frameworks' '@loader_path/Frameworks'
