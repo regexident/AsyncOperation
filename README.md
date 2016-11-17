@@ -13,10 +13,11 @@ Let's assume you have a time-consuming task that you'd rather perform on a backg
 class ExampleOperation : AsyncOperation {
 	override func main() {
 		self.state = .Executing
-		dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-			// perform time-consuming task
+
+		DispatchQueue.main.async {
+        	// perform time-consuming task
 			self.state = .Finished
-		}
+    	}
 	}
 }
 ```
@@ -26,10 +27,10 @@ class ExampleOperation : AsyncOperation {
 ```swift
 AsyncBlockOperation() { operation in
 	operation.state = .Executing
-	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+	DispatchQueue.main.async {
 		// perform time-consuming task
 		operation.state = .Finished
-	}
+    }
 }
 ```
 
@@ -45,7 +46,7 @@ Alternatively you can install **AsyncOperation** into your project with [Carthag
 
 ## Swift
 
-**AsyncOperation** is implemented in 100% Swift.
+**AsyncOperation** is implemented in 100% Swift 3.
 
 ## Dependencies
 
@@ -53,7 +54,7 @@ None.
 
 ## Requirements.
 
-OS X 10.9+ / iOS 7.0+
+OS X 10.9+ / iOS 8.0+
 
 ## Creator
 

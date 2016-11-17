@@ -12,17 +12,16 @@ import AsyncOperation
 
 class DelayOperation : AsyncOperation {
 	
-	let delay: NSTimeInterval
+	let delay: TimeInterval
 	
-	init(delay: NSTimeInterval) {
+	init(delay: TimeInterval) {
 		self.delay = delay
 	}
 	
 	override func main() {
 		self.state = .Executing
-		let delayTime = dispatch_time(DISPATCH_TIME_NOW,
-			Int64(self.delay * Double(NSEC_PER_SEC)))
-		dispatch_after(delayTime, dispatch_get_main_queue()) {
+		let delayTime = DispatchTime.now() + Double(Int64(self.delay * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
+		DispatchQueue.main.asyncAfter(deadline: delayTime) {
 			self.state = .Finished
 		}
 	}
@@ -34,7 +33,7 @@ class ViewController: UIViewController {
 	@IBOutlet var progressView: UIProgressView!
 	@IBOutlet var button: UIButton!
 	
-	let queue: NSOperationQueue = NSOperationQueue()
+	let queue: OperationQueue = OperationQueue()
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -46,13 +45,13 @@ class ViewController: UIViewController {
 		// Dispose of any resources that can be recreated.
 	}
 
-	@IBAction func startOperations(sender: UIButton?) {
+	@IBAction func startOperations(_ sender: UIButton?) {
 		self.progressView.progress = 0.0
-		self.button.enabled = false
+		self.button.isEnabled = false
 		
-		let finalOperation = NSBlockOperation() {
-			dispatch_async(dispatch_get_main_queue()) {
-				self.button.enabled = true
+		let finalOperation = BlockOperation() {
+			DispatchQueue.main.async {
+				self.button.isEnabled = true
 			}
 		}
 		
@@ -60,27 +59,27 @@ class ViewController: UIViewController {
 		
 		for i in 1...count {
 			
-			let delay = NSTimeInterval(i) / NSTimeInterval(count)
+			let delay = (TimeInterval(i) / TimeInterval(count))
 			
 			let operation: AsyncOperation!
 			
 			if i % 2 == 0 {
 				operation = AsyncBlockOperation() { operation in
 					operation.state = .Executing
-					let delayTime = dispatch_time(DISPATCH_TIME_NOW,
-						Int64(delay * Double(NSEC_PER_SEC)))
-					dispatch_after(delayTime, dispatch_get_main_queue()) {
-						operation.state = .Finished
-					}
+
+                    let delayTime = DispatchTime.now() + Double(Int64(delay * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
+                    DispatchQueue.main.asyncAfter(deadline: delayTime) {
+                        operation.state = .Finished
+                    }
 				}
 			} else {
 				operation = DelayOperation(delay: delay)
 			}
 		
 			operation.completionBlock = {
-				dispatch_async(dispatch_get_main_queue()) {
+				DispatchQueue.main.async {
 					let progress = Float(i) / Float(count)
-					println("progress: \(progress)")
+					print("progress: \(progress)")
 					self.progressView.progress = Float(i) / Float(count)
 				}
 			}
