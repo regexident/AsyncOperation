@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class AsyncOperation : NSOperation {
+open class AsyncOperation : Operation {
 	
 	public enum State : String {
 		case Waiting = "isWaiting"
@@ -18,58 +18,58 @@ public class AsyncOperation : NSOperation {
 		case Cancelled = "isCancelled"
 	}
 	
-	public var state: State = State.Waiting {
+	open var state: State = State.Waiting {
 		willSet {
-			willChangeValueForKey(State.Ready.rawValue)
-			willChangeValueForKey(State.Executing.rawValue)
-			willChangeValueForKey(State.Finished.rawValue)
-			willChangeValueForKey(State.Cancelled.rawValue)
+			willChangeValue(forKey: State.Ready.rawValue)
+			willChangeValue(forKey: State.Executing.rawValue)
+			willChangeValue(forKey: State.Finished.rawValue)
+			willChangeValue(forKey: State.Cancelled.rawValue)
 		}
 		didSet {
-			didChangeValueForKey(State.Cancelled.rawValue)
-			didChangeValueForKey(State.Finished.rawValue)
-			didChangeValueForKey(State.Executing.rawValue)
-			didChangeValueForKey(State.Ready.rawValue)
+			didChangeValue(forKey: State.Cancelled.rawValue)
+			didChangeValue(forKey: State.Finished.rawValue)
+			didChangeValue(forKey: State.Executing.rawValue)
+			didChangeValue(forKey: State.Ready.rawValue)
 		}
 	}
 	
-	public override var ready: Bool {
+	open override var isReady: Bool {
 		if self.state == .Waiting {
-			return super.ready
+			return super.isReady
 		} else {
 			return self.state == .Ready
 		}
 	}
 	
-	public override var executing: Bool {
+	open override var isExecuting: Bool {
 		return self.state == .Executing
 	}
 	
-	public override var finished: Bool {
+	open override var isFinished: Bool {
 		return self.state == .Finished
 	}
 	
-	public override var cancelled: Bool {
+	open override var isCancelled: Bool {
 		return self.state == .Cancelled
 	}
 	
-	public override var asynchronous: Bool {
+	open override var isAsynchronous: Bool {
 		return true
 	}
 	
 }
 
-public class AsyncBlockOperation : AsyncOperation {
+open class AsyncBlockOperation : AsyncOperation {
 	
 	public typealias Closure = (AsyncBlockOperation) -> ()
 	
 	let closure: Closure
 	
-	public init(closure: Closure) {
+	public init(closure: @escaping Closure) {
 		self.closure = closure
 	}
 	
-	public override func main() {
+	open override func main() {
 		self.closure(self)
 	}
 	
