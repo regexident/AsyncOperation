@@ -9,7 +9,7 @@
 import Foundation
 
 open class AsyncOperation : Operation {
-	
+
 	public enum State : String {
 		case Waiting = "isWaiting"
 		case Ready = "isReady"
@@ -17,7 +17,7 @@ open class AsyncOperation : Operation {
 		case Finished = "isFinished"
 		case Cancelled = "isCancelled"
 	}
-	
+
 	open var state: State = State.Waiting {
 		willSet {
 			willChangeValue(forKey: State.Ready.rawValue)
@@ -32,7 +32,7 @@ open class AsyncOperation : Operation {
 			didChangeValue(forKey: State.Ready.rawValue)
 		}
 	}
-	
+
 	open override var isReady: Bool {
 		if self.state == .Waiting {
 			return super.isReady
@@ -40,37 +40,51 @@ open class AsyncOperation : Operation {
 			return self.state == .Ready
 		}
 	}
-	
+
 	open override var isExecuting: Bool {
-		return self.state == .Executing
+
+		if self.state == .Waiting {
+			return super.isExecuting
+		} else {
+			return self.state == .Executing
+		}
 	}
-	
+
 	open override var isFinished: Bool {
-		return self.state == .Finished
+
+		if self.state == .Waiting {
+			return super.isFinished
+		} else {
+			return self.state == .Finished
+		}
 	}
-	
+
 	open override var isCancelled: Bool {
-		return self.state == .Cancelled
+		if self.state == .Waiting {
+			return super.isCancelled
+		} else {
+			return self.state == .Cancelled
+		}
 	}
-	
+
 	open override var isAsynchronous: Bool {
 		return true
 	}
-	
+
 }
 
 open class AsyncBlockOperation : AsyncOperation {
-	
+
 	public typealias Closure = (AsyncBlockOperation) -> ()
-	
+
 	let closure: Closure
-	
+
 	public init(closure: @escaping Closure) {
 		self.closure = closure
 	}
-	
+
 	open override func main() {
 		self.closure(self)
 	}
-	
+
 }
