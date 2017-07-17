@@ -11,14 +11,14 @@ Let's assume you have a time-consuming task that you'd rather perform on a backg
 
 ```swift
 class ExampleOperation : AsyncOperation {
-	override func main() {
-		self.state = .Executing
+  override func main() {
+    self.state = .Executing
 
-		DispatchQueue.main.async {
-        	// perform time-consuming task
-			self.state = .Finished
-    	}
-	}
+    DispatchQueue.main.async {
+      // perform time-consuming task
+      self.state = .Finished
+    }
+  }
 }
 ```
 
@@ -26,11 +26,11 @@ class ExampleOperation : AsyncOperation {
 
 ```swift
 AsyncBlockOperation() { operation in
-	operation.state = .Executing
-	DispatchQueue.main.async {
-		// perform time-consuming task
-		operation.state = .Finished
-    }
+  operation.state = .Executing
+  DispatchQueue.main.async {
+    // perform time-consuming task
+    operation.state = .Finished
+  }
 }
 ```
 
