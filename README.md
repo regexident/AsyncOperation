@@ -14,7 +14,7 @@ class ExampleOperation : AsyncOperation {
   override func main() {
     self.state = .Executing
 
-    DispatchQueue.main.async {
+    DispatchQueue.global().async {
       // perform time-consuming task
       self.state = .Finished
     }
@@ -27,7 +27,7 @@ class ExampleOperation : AsyncOperation {
 ```swift
 AsyncBlockOperation() { operation in
   operation.state = .Executing
-  DispatchQueue.main.async {
+  DispatchQueue.global().async {
     // perform time-consuming task
     operation.state = .Finished
   }
