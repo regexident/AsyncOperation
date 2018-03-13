@@ -19,10 +19,10 @@ class DelayOperation : AsyncOperation {
 	}
 	
 	override func main() {
-		self.state = .Executing
+		self.state = .executing
 		let delayTime = DispatchTime.now() + Double(Int64(self.delay * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
 		DispatchQueue.main.asyncAfter(deadline: delayTime) {
-			self.state = .Finished
+			self.state = .finished
 		}
 	}
 	
@@ -65,11 +65,11 @@ class ViewController: UIViewController {
 			
 			if i % 2 == 0 {
 				operation = AsyncBlockOperation() { operation in
-					operation.state = .Executing
+					operation.state = .executing
 
                     let delayTime = DispatchTime.now() + Double(Int64(delay * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
                     DispatchQueue.main.asyncAfter(deadline: delayTime) {
-                        operation.state = .Finished
+                        operation.state = .finished
                     }
 				}
 			} else {
