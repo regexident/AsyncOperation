@@ -26,6 +26,19 @@ open class AsyncOperation : Operation {
 			willChangeValue(forKey: State.cancelled.rawValue)
 		}
 		didSet {
+            switch self.state {
+            case .waiting:
+                assert(oldValue == .waiting)
+            case .ready:
+                assert(oldValue == .waiting)
+            case .executing:
+                assert(oldValue == .ready || oldValue == .waiting)
+            case .finished:
+                assert(oldValue != .cancelled)
+            case .cancelled:
+                break
+            }
+            
 			didChangeValue(forKey: State.cancelled.rawValue)
 			didChangeValue(forKey: State.finished.rawValue)
 			didChangeValue(forKey: State.executing.rawValue)
