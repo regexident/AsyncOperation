@@ -11,59 +11,59 @@ import Foundation
 open class AsyncOperation : Operation {
 
 	public enum State : String {
-		case Waiting = "isWaiting"
-		case Ready = "isReady"
-		case Executing = "isExecuting"
-		case Finished = "isFinished"
-		case Cancelled = "isCancelled"
+		case waiting = "isWaiting"
+		case ready = "isReady"
+		case executing = "isExecuting"
+		case finished = "isFinished"
+		case cancelled = "isCancelled"
 	}
 
-	open var state: State = State.Waiting {
+	open var state: State = State.waiting {
 		willSet {
-			willChangeValue(forKey: State.Ready.rawValue)
-			willChangeValue(forKey: State.Executing.rawValue)
-			willChangeValue(forKey: State.Finished.rawValue)
-			willChangeValue(forKey: State.Cancelled.rawValue)
+			willChangeValue(forKey: State.ready.rawValue)
+			willChangeValue(forKey: State.executing.rawValue)
+			willChangeValue(forKey: State.finished.rawValue)
+			willChangeValue(forKey: State.cancelled.rawValue)
 		}
 		didSet {
-			didChangeValue(forKey: State.Cancelled.rawValue)
-			didChangeValue(forKey: State.Finished.rawValue)
-			didChangeValue(forKey: State.Executing.rawValue)
-			didChangeValue(forKey: State.Ready.rawValue)
+			didChangeValue(forKey: State.cancelled.rawValue)
+			didChangeValue(forKey: State.finished.rawValue)
+			didChangeValue(forKey: State.executing.rawValue)
+			didChangeValue(forKey: State.ready.rawValue)
 		}
 	}
 
 	open override var isReady: Bool {
-		if self.state == .Waiting {
+		if self.state == .waiting {
 			return super.isReady
 		} else {
-			return self.state == .Ready
+			return self.state == .ready
 		}
 	}
 
 	open override var isExecuting: Bool {
 
-		if self.state == .Waiting {
+		if self.state == .waiting {
 			return super.isExecuting
 		} else {
-			return self.state == .Executing
+			return self.state == .executing
 		}
 	}
 
 	open override var isFinished: Bool {
 
-		if self.state == .Waiting {
+		if self.state == .waiting {
 			return super.isFinished
 		} else {
-			return self.state == .Finished
+			return self.state == .finished
 		}
 	}
 
 	open override var isCancelled: Bool {
-		if self.state == .Waiting {
+		if self.state == .waiting {
 			return super.isCancelled
 		} else {
-			return self.state == .Cancelled
+			return self.state == .cancelled
 		}
 	}
 
@@ -84,6 +84,8 @@ open class AsyncBlockOperation : AsyncOperation {
 	}
 
 	open override func main() {
+        guard !self.isCancelled else { return }
+        
 		self.closure(self)
 	}
 
