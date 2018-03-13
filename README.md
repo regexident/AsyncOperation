@@ -62,7 +62,7 @@ Vincent Esche ([@regexident][3])
 
 ## License
 
-**Sandbox** is available under a **modified BSD-3 clause license** with the **additional requirement of attribution**. See the `LICENSE` file for more info.
+**AsyncOperation** is available under a **modified BSD-3 clause license** with the **additional requirement of attribution**. See the `LICENSE` file for more info.
 
 [1]:	https://github.com/Carthage/Carthage
 [2]:	http://cocoapods.org/
